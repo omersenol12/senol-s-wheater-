@@ -1,4 +1,4 @@
-const CACHE_NAME = 'weather-pwa-v1';
+const CACHE_NAME = 'weather-pwa-v2';
 const ASSETS = [
     './',
     './index.html',
@@ -10,6 +10,7 @@ const ASSETS = [
 
 // Install Event
 self.addEventListener('install', event => {
+    self.skipWaiting(); // Force the waiting service worker to become the active service worker.
     event.waitUntil(
         caches.open(CACHE_NAME).then(cache => {
             return cache.addAll(ASSETS);
@@ -26,7 +27,7 @@ self.addEventListener('activate', event => {
                     return caches.delete(key);
                 }
             }));
-        })
+        }).then(() => self.clients.claim()) // Force the active service worker to take control of all clients immediately
     );
 });
 

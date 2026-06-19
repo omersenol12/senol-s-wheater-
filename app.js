@@ -253,8 +253,14 @@ saveLocationBtn.addEventListener("click", async () => {
     saveLocationBtn.disabled = true;
     
     try {
-        const res = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(query)}&language=tr&count=1`);
-        const data = await res.json();
+        let res = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(query)}&language=tr&count=1`);
+        let data = await res.json();
+        
+        // Eğer ilçe ile arama sonuç vermezse, sadece şehir adıyla tekrar ara
+        if ((!data.results || data.results.length === 0) && district) {
+            res = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}&language=tr&count=1`);
+            data = await res.json();
+        }
         
         if (data.results && data.results.length > 0) {
             const loc = data.results[0];
@@ -271,7 +277,16 @@ saveLocationBtn.addEventListener("click", async () => {
             localStorage.setItem('userLocation', JSON.stringify(primaryLocation));
             localStorage.setItem('userPrefs', JSON.stringify(userPreferences));
             
-            cities = [primaryLocation, ...DEFAULT_CITIES];
+            const isSameCity = (dc, loc) => {
+                const dcName = dc.name.toLocaleLowerCase('tr-TR');
+                const locName = loc.name.toLocaleLowerCase('tr-TR');
+                const nameMatch = locName.includes(dcName) || dcName.includes(locName.split(' ')[0]);
+                const distMatch = Math.abs(dc.lat - loc.lat) < 0.6 && Math.abs(dc.lon - loc.lon) < 0.6;
+                return nameMatch || distMatch;
+            };
+            
+            const filteredDefaults = DEFAULT_CITIES.filter(dc => !isSameCity(dc, primaryLocation));
+            cities = [primaryLocation, ...filteredDefaults];
             onboardingModal.classList.add('hidden');
             
             // Request Notification Permission
@@ -303,7 +318,16 @@ function initApp() {
     }
     
     if (savedLoc) {
-        cities = [JSON.parse(savedLoc), ...DEFAULT_CITIES];
+        const primaryLocation = JSON.parse(savedLoc);
+        const isSameCity = (dc, loc) => {
+            const dcName = dc.name.toLocaleLowerCase('tr-TR');
+            const locName = loc.name.toLocaleLowerCase('tr-TR');
+            const nameMatch = locName.includes(dcName) || dcName.includes(locName.split(' ')[0]);
+            const distMatch = Math.abs(dc.lat - loc.lat) < 0.6 && Math.abs(dc.lon - loc.lon) < 0.6;
+            return nameMatch || distMatch;
+        };
+        const filteredDefaults = DEFAULT_CITIES.filter(dc => !isSameCity(dc, primaryLocation));
+        cities = [primaryLocation, ...filteredDefaults];
         renderWeather();
     } else {
         onboardingModal.classList.remove('hidden');
