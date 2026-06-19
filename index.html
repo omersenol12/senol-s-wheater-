@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Hava Durumu</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0f172a" id="theme-color-meta">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⛅</text></svg>">
+</head>
+<body>
+    <!-- Dinamik Arkaplan Efektleri -->
+    <div id="dynamic-bg" class="bg-default">
+        <div class="effect-layer" id="effect-layer"></div>
+    </div>
+
+    <!-- Onboarding Modal -->
+    <div id="onboarding-modal" class="modal-overlay hidden">
+        <div class="modal-content glass">
+            <h2>Hoş Geldiniz! ⛅</h2>
+            <p>Size en doğru hava durumunu sunabilmemiz için lütfen bulunduğunuz konumu girin.</p>
+            
+            <div class="form-group">
+                <label for="ob-city">Şehir (Zorunlu)</label>
+                <input type="text" id="ob-city" placeholder="Örn: İstanbul" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="ob-district">İlçe (Opsiyonel)</label>
+                <input type="text" id="ob-district" placeholder="Örn: Kadıköy">
+                <div id="district-warning" class="warning-text hidden">⚠️ İlçe belirtmediğiniz için veriler şehir merkezini baz alacaktır. Yerel sapmalar olabilir.</div>
+            </div>
+
+            <div class="form-group">
+                <label class="checkbox-container">
+                    <input type="checkbox" id="ob-notify-storm" checked>
+                    <span class="checkmark"></span>
+                    Fırtına ve Şiddetli Hava uyarılarını bana bildir (İzin gerektirir)
+                </label>
+                <label class="checkbox-container">
+                    <input type="checkbox" id="ob-notify-cold" checked>
+                    <span class="checkmark"></span>
+                    Aşırı soğuk / Don olaylarını bana bildir (0°C ve altı)
+                </label>
+            </div>
+            
+            <button id="save-location-btn" class="primary-btn">Kaydet ve Başla</button>
+        </div>
+    </div>
+
+    <div class="app-container">
+        <header>
+            <div class="search-container glass-input">
+                <input type="text" id="search-input" placeholder="Başka bir şehir ara...">
+                <button id="search-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                </button>
+            </div>
+            <div id="search-suggestions" class="suggestions-box hidden"></div>
+        </header>
+        
+        <main id="weather-content">
+            <div class="loader">Hava durumu verileri yükleniyor...</div>
+        </main>
+    </div>
+    
+    <script src="app.js"></script>
+</body>
+</html>
