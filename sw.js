@@ -1,4 +1,4 @@
-const CACHE_NAME = 'weather-pwa-v3';
+const CACHE_NAME = 'weather-pwa-v4';
 const ASSETS = [
     './',
     './index.html',

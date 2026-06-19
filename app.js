@@ -78,7 +78,7 @@ function updateDynamicBackground(weatherType) {
 }
 
 async function checkAndSendNotifications(currentTemp, weatherCode) {
-    if (Notification.permission !== "granted") return;
+    if (!('Notification' in window) || Notification.permission !== "granted") return;
     
     const info = getWeatherInfo(weatherCode);
     
@@ -298,8 +298,8 @@ saveLocationBtn.addEventListener("click", async () => {
             
             // Request Notification Permission
             if (userPreferences.notifyStorm || userPreferences.notifyCold) {
-                if (Notification.permission !== "granted" && Notification.permission !== "denied") {
-                    await Notification.requestPermission();
+                if ('Notification' in window && Notification.permission !== "granted" && Notification.permission !== "denied") {
+                    try { await Notification.requestPermission(); } catch (e) { console.warn("Bildirim desteklenmiyor.", e); }
                 }
             }
             
