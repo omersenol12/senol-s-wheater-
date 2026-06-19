@@ -89,6 +89,31 @@ header {
     padding-bottom: 10px;
 }
 
+.header-top {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 12px;
+}
+
+.text-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 8px 12px;
+    border-radius: 12px;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.text-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
 .glass-input {
     display: flex;
     gap: 10px;

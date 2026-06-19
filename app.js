@@ -14,6 +14,7 @@ const weatherContent = document.getElementById("weather-content");
 const searchInput = document.getElementById("search-input");
 const searchSuggestions = document.getElementById("search-suggestions");
 const searchBtn = document.getElementById("search-btn");
+const changeLocationBtn = document.getElementById("change-location-btn");
 
 const onboardingModal = document.getElementById("onboarding-modal");
 const obCity = document.getElementById("ob-city");
@@ -238,6 +239,12 @@ obDistrict.addEventListener("input", (e) => {
         districtWarning.classList.add("hidden");
     }
 });
+
+if (changeLocationBtn) {
+    changeLocationBtn.addEventListener("click", () => {
+        onboardingModal.classList.remove("hidden");
+    });
+}
 
 saveLocationBtn.addEventListener("click", async () => {
     const city = obCity.value.trim();
